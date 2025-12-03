@@ -72,6 +72,8 @@ export 'package:xmpp_sasl/xmpp_sasl.dart';
 export 'package:xmpp_sasl_anonymous/xmpp_sasl_anonymous.dart';
 export 'package:xmpp_sasl_plain/xmpp_sasl_plain.dart';
 export 'package:xmpp_session_establishment/xmpp_session_establishment.dart';
+// Stanzas
+export 'package:xmpp_stanza/xmpp_stanza.dart';
 // Stream features
 export 'package:xmpp_stream_features/xmpp_stream_features.dart' hide nsStream;
 export 'package:xmpp_stream_management/xmpp_stream_management.dart';

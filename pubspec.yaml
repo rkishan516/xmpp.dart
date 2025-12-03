@@ -27,6 +27,7 @@ workspace:
   - packages/xmpp_sasl_anonymous
   - packages/xmpp_sasl_plain
   - packages/xmpp_session_establishment
+  - packages/xmpp_stanza
   - packages/xmpp_stream_features
   - packages/xmpp_stream_management
   - packages/xmpp_test

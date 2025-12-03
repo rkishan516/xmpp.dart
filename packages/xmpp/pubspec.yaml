@@ -26,6 +26,7 @@ dependencies:
   xmpp_sasl_anonymous: ^0.1.0
   xmpp_sasl_plain: ^0.1.0
   xmpp_session_establishment: ^0.1.0
+  xmpp_stanza: ^0.1.0
   xmpp_stream_features: ^0.1.0
   xmpp_stream_management: ^0.1.0
   xmpp_time: ^0.1.0
