@@ -1,0 +1,38 @@
+name: xmpp_dart_workspace
+description: Dart XMPP library - workspace root
+publish_to: none
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+# Dart workspace - manages all packages together
+workspace:
+  - packages/xmpp
+  - packages/xmpp_base64
+  - packages/xmpp_client
+  - packages/xmpp_component
+  - packages/xmpp_component_core
+  - packages/xmpp_connection
+  - packages/xmpp_debug
+  - packages/xmpp_error
+  - packages/xmpp_events
+  - packages/xmpp_id
+  - packages/xmpp_iq
+  - packages/xmpp_jid
+  - packages/xmpp_middleware
+  - packages/xmpp_reconnect
+  - packages/xmpp_resolve
+  - packages/xmpp_resource_binding
+  - packages/xmpp_sasl
+  - packages/xmpp_sasl_anonymous
+  - packages/xmpp_sasl_plain
+  - packages/xmpp_session_establishment
+  - packages/xmpp_stream_features
+  - packages/xmpp_stream_management
+  - packages/xmpp_test
+  - packages/xmpp_time
+  - packages/xmpp_websocket
+  - packages/xmpp_xml
+  - example
+dependencies:
+  talker: ^5.1.2

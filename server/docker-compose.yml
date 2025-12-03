@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  prosody:
+    image: prosody/prosody:latest
+    container_name: xmpp-prosody
+    ports:
+      - "5222:5222"   # Client-to-server (C2S)
+      - "5223:5223"   # C2S with TLS
+      - "5269:5269"   # Server-to-server (S2S)
+      - "5280:5280"   # HTTP (BOSH/WebSocket)
+      - "5281:5281"   # HTTPS (BOSH/WebSocket)
+      - "5347:5347"   # Component
+    volumes:
+      - ./prosody-docker.cfg.lua:/etc/prosody/prosody.cfg.lua:ro
+    environment:
+      - DOMAIN=localhost
+      - ALLOW_REGISTRATION=true
+    restart: unless-stopped

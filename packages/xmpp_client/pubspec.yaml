@@ -1,0 +1,29 @@
+name: xmpp_client
+version: 0.1.0
+description: Full-featured XMPP client for Dart.
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  xmpp_events: ^0.1.0
+  xmpp_jid: ^0.1.0
+  xmpp_xml: ^0.1.0
+  xmpp_connection: ^0.1.0
+  xmpp_middleware: ^0.1.0
+  xmpp_iq: ^0.1.0
+  xmpp_stream_features: ^0.1.0
+  xmpp_sasl: ^0.1.0
+  xmpp_sasl_plain: ^0.1.0
+  xmpp_sasl_anonymous: ^0.1.0
+  xmpp_resource_binding: ^0.1.0
+  xmpp_session_establishment: ^0.1.0
+  xmpp_stream_management: ^0.1.0
+  xmpp_reconnect: ^0.1.0
+  xmpp_websocket: ^0.1.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^6.0.0

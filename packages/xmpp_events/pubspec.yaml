@@ -1,0 +1,16 @@
+name: xmpp_events
+description: Event emitter and async utilities for XMPP
+version: 0.1.0
+repository: https://github.com/xmppjs/xmpp.dart/tree/main/packages/xmpp_events
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  xmpp_error: ^0.1.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^6.0.0

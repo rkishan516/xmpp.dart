@@ -1,0 +1,17 @@
+name: xmpp_xml
+description: XML element and streaming parser for XMPP
+version: 0.1.0
+repository: https://github.com/xmppjs/xmpp.dart/tree/main/packages/xmpp_xml
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  xml: ^6.3.0
+  xmpp_events: ^0.1.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^6.0.0

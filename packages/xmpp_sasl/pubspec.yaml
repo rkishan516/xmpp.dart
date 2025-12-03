@@ -1,0 +1,20 @@
+name: xmpp_sasl
+version: 0.1.0
+description: XMPP SASL authentication framework.
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  xmpp_base64: ^0.1.0
+  xmpp_events: ^0.1.0
+  xmpp_error: ^0.1.0
+  xmpp_xml: ^0.1.0
+  xmpp_stream_features: ^0.1.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^6.0.0
+  xmpp_middleware: ^0.1.0

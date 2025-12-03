@@ -1,0 +1,19 @@
+name: xmpp_connection
+description: XMPP connection state machine and base connection class
+version: 0.1.0
+repository: https://github.com/xmppjs/xmpp.dart/tree/main/packages/xmpp_connection
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  xmpp_events: ^0.1.0
+  xmpp_jid: ^0.1.0
+  xmpp_xml: ^0.1.0
+  xmpp_error: ^0.1.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^6.0.0

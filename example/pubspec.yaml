@@ -1,0 +1,11 @@
+name: xmpp_example
+description: Example usage of xmpp.dart
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  talker: ^5.1.2
+  xmpp: ^0.1.0

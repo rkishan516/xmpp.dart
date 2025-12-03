@@ -1,0 +1,19 @@
+name: xmpp_session_establishment
+version: 0.1.0
+description: XMPP session establishment for legacy server compatibility.
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  xmpp_xml: ^0.1.0
+  xmpp_iq: ^0.1.0
+  xmpp_stream_features: ^0.1.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^6.0.0
+  xmpp_events: ^0.1.0
+  xmpp_middleware: ^0.1.0

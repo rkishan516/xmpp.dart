@@ -1,0 +1,62 @@
+name: Dart CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        dart: [stable, beta]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.dart }}
+
+      - name: Install dependencies
+        run: dart run scripts/build.dart
+
+      - name: Analyze
+        run: dart run scripts/analyze.dart
+
+      - name: Run tests
+        run: dart run scripts/test.dart
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Prosody
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y prosody lua-sec
+
+      - name: Install xmpp.js
+        run: npm install @xmpp/client @xmpp/component
+
+      - name: Install Dart dependencies
+        run: dart run scripts/build.dart
+
+      - name: Run E2E tests
+        run: |
+          echo "E2E tests will be implemented in Phase 7"
+          # dart test e2e/
