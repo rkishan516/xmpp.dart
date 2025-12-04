@@ -108,13 +108,23 @@ class Message extends Stanza {
         ]));
 
   /// Create a message from an XML element.
-  Message.fromXml(super.element);
+  ///
+  /// If [parseExtensions] is true, registered typed extensions will be
+  /// automatically parsed from the XML.
+  Message.fromXml(super.element, {bool parseExtensions = false}) {
+    if (parseExtensions) {
+      parseTypedExtensions();
+    }
+  }
 
   /// Parse a message from an XML string.
-  factory Message.fromString(String xmlString) {
+  ///
+  /// If [parseExtensions] is true, registered typed extensions will be
+  /// automatically parsed from the XML.
+  factory Message.fromString(String xmlString, {bool parseExtensions = false}) {
     final doc = xmlpkg.XmlDocument.parse(xmlString);
     final element = _convertXmlElement(doc.rootElement);
-    return Message.fromXml(element);
+    return Message.fromXml(element, parseExtensions: parseExtensions);
   }
 
   /// The message type.
@@ -219,19 +229,29 @@ class Message extends Stanza {
   bool get isError => messageType == MessageType.error;
 
   /// Create a reply to this message.
-  Message reply({String? body, String? subject}) {
-    return Message(
+  ///
+  /// If [copyExtensions] is true, typed extensions will be copied to the reply.
+  Message reply({String? body, String? subject, bool copyExtensions = false}) {
+    final reply = Message(
       to: from,
       type: messageType,
       body: body,
       subject: subject,
       thread: thread,
     );
+    if (copyExtensions) {
+      for (final ext in typedExtensions) {
+        reply.addTypedExtension(ext);
+      }
+    }
+    return reply;
   }
 
   @override
   Message copy() {
-    return Message.fromXml(element.clone());
+    final copied = Message.fromXml(element.clone());
+    copied.copyTypedExtensionsFrom(this);
+    return copied;
   }
 }
 

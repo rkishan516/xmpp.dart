@@ -148,7 +148,15 @@ class Presence extends Stanza {
           if (priority != null) xml('priority', {}, [priority.toString()]),
         ]));
 
-  Presence.fromXml(super.element);
+  /// Create a presence from an XML element.
+  ///
+  /// If [parseExtensions] is true, registered typed extensions will be
+  /// automatically parsed from the XML.
+  Presence.fromXml(super.element, {bool parseExtensions = false}) {
+    if (parseExtensions) {
+      parseTypedExtensions();
+    }
+  }
 
   factory Presence.available({PresenceShow? show, String? status, int? priority}) {
     return Presence(type: PresenceType.available, show: show, status: status, priority: priority);
@@ -222,7 +230,11 @@ class Presence extends Stanza {
   bool get isError => presenceType == PresenceType.error;
 
   @override
-  Presence copy() => Presence.fromXml(element.clone());
+  Presence copy() {
+    final copied = Presence.fromXml(element.clone());
+    copied.copyTypedExtensionsFrom(this);
+    return copied;
+  }
 }
 
 extension PresenceParsing on XmlElement {

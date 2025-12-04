@@ -20,6 +20,7 @@
 /// ```
 library;
 
+export 'src/extension.dart';
 export 'src/message.dart';
 export 'src/presence.dart';
 export 'src/stanza.dart';

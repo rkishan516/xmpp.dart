@@ -1,12 +1,18 @@
 import 'package:xmpp_jid/xmpp_jid.dart';
 import 'package:xmpp_xml/xmpp_xml.dart';
 
+import 'extension.dart';
+
 /// Base class for all XMPP stanzas (message, presence, iq).
 ///
 /// Provides common attributes and functionality shared by all stanza types.
+/// Supports both raw XML extensions and typed [StanzaExtension] objects.
 abstract class Stanza {
   /// The underlying XML element.
   final XmlElement element;
+
+  /// Typed extensions attached to this stanza.
+  final List<StanzaExtension> _typedExtensions = [];
 
   /// Create a stanza from an existing XML element.
   Stanza(this.element);
@@ -105,6 +111,98 @@ abstract class Stanza {
   /// Get a single extension element by name and namespace.
   XmlElement? getExtension(String name, String xmlns) {
     return element.getChild(name, xmlns);
+  }
+
+  // ============================================
+  // Typed Extension Support
+  // ============================================
+
+  /// Add a typed extension to this stanza.
+  ///
+  /// The extension will be serialized to XML when [toXml] is called.
+  /// ```dart
+  /// message.addTypedExtension(DelayExtension(stamp: DateTime.now()));
+  /// ```
+  void addTypedExtension(StanzaExtension extension) {
+    _typedExtensions.add(extension);
+    element.append(extension.toXml());
+  }
+
+  /// Get a typed extension by its type.
+  ///
+  /// Returns the first extension of type [T], or null if not found.
+  /// ```dart
+  /// final delay = message.getTypedExtension<DelayExtension>();
+  /// ```
+  T? getTypedExtension<T extends StanzaExtension>() {
+    for (final ext in _typedExtensions) {
+      if (ext is T) return ext;
+    }
+    return null;
+  }
+
+  /// Get all typed extensions of a specific type.
+  ///
+  /// ```dart
+  /// final allDelays = message.getTypedExtensions<DelayExtension>();
+  /// ```
+  List<T> getTypedExtensions<T extends StanzaExtension>() {
+    return _typedExtensions.whereType<T>().toList();
+  }
+
+  /// Get all typed extensions.
+  List<StanzaExtension> get typedExtensions => List.unmodifiable(_typedExtensions);
+
+  /// Check if a typed extension of type [T] exists.
+  bool hasTypedExtension<T extends StanzaExtension>() {
+    return _typedExtensions.any((ext) => ext is T);
+  }
+
+  /// Remove a typed extension.
+  ///
+  /// Returns true if the extension was found and removed.
+  bool removeTypedExtension(StanzaExtension extension) {
+    final removed = _typedExtensions.remove(extension);
+    if (removed) {
+      // Also remove from XML
+      final xmlExt = element.getChild(extension.name, extension.xmlns);
+      if (xmlExt != null) {
+        element.remove(xmlExt);
+      }
+    }
+    return removed;
+  }
+
+  /// Remove all typed extensions of type [T].
+  ///
+  /// Returns the number of extensions removed.
+  int removeTypedExtensions<T extends StanzaExtension>() {
+    final toRemove = _typedExtensions.whereType<T>().toList();
+    for (final ext in toRemove) {
+      removeTypedExtension(ext);
+    }
+    return toRemove.length;
+  }
+
+  /// Parse and add typed extensions from XML children.
+  ///
+  /// Uses [ExtensionRegistry] to find parsers for child elements.
+  /// Call this after creating a stanza from XML to populate typed extensions.
+  void parseTypedExtensions() {
+    for (final child in element.getChildElements()) {
+      final parsed = ExtensionRegistry.parse(child);
+      if (parsed != null) {
+        _typedExtensions.add(parsed);
+      }
+    }
+  }
+
+  /// Copy typed extensions from another stanza.
+  ///
+  /// Used internally when copying stanzas. Does not add XML elements
+  /// since the cloned element already contains them.
+  void copyTypedExtensionsFrom(Stanza other) {
+    _typedExtensions.addAll(other._typedExtensions);
   }
 
   /// Check if stanza has an error.
