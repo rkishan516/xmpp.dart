@@ -20,6 +20,7 @@ workspace:
   - packages/xmpp_iq
   - packages/xmpp_jid
   - packages/xmpp_middleware
+  - packages/xmpp_ping
   - packages/xmpp_reconnect
   - packages/xmpp_resolve
   - packages/xmpp_resource_binding

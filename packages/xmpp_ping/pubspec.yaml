@@ -1,0 +1,18 @@
+name: xmpp_ping
+version: 0.1.0
+description: XMPP Ping (XEP-0199) for connection keepalive and entity reachability.
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  xmpp_events: ^0.1.0
+  xmpp_xml: ^0.1.0
+  xmpp_iq: ^0.1.0
+  xmpp_middleware: ^0.1.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^6.0.0

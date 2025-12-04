@@ -14,6 +14,7 @@ dependencies:
   xmpp_connection: ^0.1.0
   xmpp_middleware: ^0.1.0
   xmpp_iq: ^0.1.0
+  xmpp_ping: ^0.1.0
   xmpp_stream_features: ^0.1.0
   xmpp_sasl: ^0.1.0
   xmpp_sasl_plain: ^0.1.0

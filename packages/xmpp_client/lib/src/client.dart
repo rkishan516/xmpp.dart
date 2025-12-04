@@ -5,6 +5,7 @@ import 'package:xmpp_events/xmpp_events.dart';
 import 'package:xmpp_iq/xmpp_iq.dart';
 import 'package:xmpp_jid/xmpp_jid.dart';
 import 'package:xmpp_middleware/xmpp_middleware.dart';
+import 'package:xmpp_ping/xmpp_ping.dart';
 import 'package:xmpp_reconnect/xmpp_reconnect.dart';
 import 'package:xmpp_resource_binding/xmpp_resource_binding.dart';
 import 'package:xmpp_sasl/xmpp_sasl.dart';
@@ -36,6 +37,14 @@ class ClientOptions {
   /// The resource to bind (optional, server will assign if not provided).
   final String? resource;
 
+  /// If `true`, periodically send a ping to keep the connection alive.
+  /// Defaults to `false`.
+  final bool pingKeepAlive;
+
+  /// The interval between keepalive pings in seconds.
+  /// Defaults to 180 seconds (3 minutes).
+  final int pingKeepAliveInterval;
+
   ClientOptions({
     required this.service,
     this.domain,
@@ -43,6 +52,8 @@ class ClientOptions {
     this.username,
     this.password,
     this.resource,
+    this.pingKeepAlive = false,
+    this.pingKeepAliveInterval = 180,
   });
 }
 
@@ -80,6 +91,9 @@ class Client extends EventEmitter {
 
   /// The reconnect handler.
   late final Reconnect reconnect;
+
+  /// The ping handler (XEP-0199).
+  late final Ping pingHandler;
 
   /// Client options.
   final ClientOptions options;
@@ -129,6 +143,13 @@ class Client extends EventEmitter {
     );
     iqCallee.start();
 
+    // Set up XEP-0199 ping handler
+    pingHandler = ping(
+      entity: _connection,
+      iqCaller: iqCaller,
+      iqCallee: iqCallee,
+    );
+
     // Set up SASL
     saslFactory = SASLFactory();
     saslPlain(saslFactory);
@@ -152,7 +173,26 @@ class Client extends EventEmitter {
 
     // Set up reconnection
     reconnect = Reconnect(entity: _connection);
+
+    // Set up ping keepalive
+    if (options.pingKeepAlive) {
+      _connection.on<dynamic>('online', (_) {
+        pingHandler.startKeepAlive(interval: options.pingKeepAliveInterval);
+      });
+      _connection.on<dynamic>('offline', (_) => pingHandler.stopKeepAlive());
+      _connection.on<dynamic>('disconnect', (_) => pingHandler.stopKeepAlive());
+    }
+
+    // Forward ping events
+    _connection.on<dynamic>('ping:success', (_) => emit('ping:success', null));
+    _connection.on<dynamic>('ping:error', (err) => emit('ping:error', err));
   }
+
+  /// Send an XEP-0199 ping to an entity.
+  ///
+  /// If [to] is null, pings the server.
+  /// Returns a [PingResult] with success/failure and round-trip time.
+  Future<PingResult> sendPing([String? to]) => pingHandler.ping(to);
 
   /// SASL authentication callback.
   Future<void> _onAuthenticate(
@@ -203,6 +243,7 @@ class Client extends EventEmitter {
 
   /// Stop the client connection.
   Future<void> stop() async {
+    pingHandler.stopKeepAlive();
     reconnect.stop();
     await _connection.stop();
   }
