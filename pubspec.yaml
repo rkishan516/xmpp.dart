@@ -37,4 +37,4 @@ workspace:
   - packages/xmpp_xml
   - example
 dependencies:
-  talker: ^5.1.2
+  talker: ^5.1.17
